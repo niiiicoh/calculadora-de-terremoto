@@ -15,19 +15,35 @@ export function DieciochoCountdown() {
     };
   }, []);
   return (
-    <div className="countdown">
+    <section
+      className="countdown"
+      aria-label="Cuenta regresiva al 18 de septiembre"
+    >
       {time?.celebration ? (
         <strong>¡Llegó el 18!</strong>
       ) : (
         <>
-          <span>Para el próximo 18</span>
-          <strong>
-            {time
-              ? `${time.days} ${time.days === 1 ? "día" : "días"} · ${String(time.hours).padStart(2, "0")} h · ${String(time.minutes).padStart(2, "0")} min`
-              : "18 de septiembre"}
-          </strong>
+          <p>
+            Para el <strong>18 de septiembre</strong>
+          </p>
+          <dl className="countdown-values">
+            {(
+              [
+                ["Días", time?.days],
+                ["Horas", time?.hours],
+                ["Minutos", time?.minutes],
+              ] as const
+            ).map(([label, value]) => (
+              <div key={label}>
+                <dt>{label}</dt>
+                <dd>
+                  {value === undefined ? "—" : String(value).padStart(2, "0")}
+                </dd>
+              </div>
+            ))}
+          </dl>
         </>
       )}
-    </div>
+    </section>
   );
 }

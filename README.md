@@ -44,7 +44,7 @@ Las fuentes Anton y Barlow se descargan durante la compilación mediante `next/f
 
 Crear tarjeta despliega un editor opcional con nombre manual (hasta 40 caracteres), generador local y tema claro/nocturno independiente. La vista previa y el PNG 1080 × 1350 usan el mismo canvas y las fuentes del sitio. Descargar imagen está siempre disponible al terminar el render; Compartir imagen aparece cuando el navegador admite archivos. La copia de texto conserva su comportamiento directo.
 
-El tema inicial respeta el sistema; la elección manual se guarda en localStorage. La cuenta regresiva usa la fecha local y se actualiza cada 15 segundos. Los mensajes contextuales no alteran los cálculos.
+El tema inicial es claro; la elección manual se guarda en localStorage. La cuenta regresiva muestra días, horas y minutos en un recuadro, usa la fecha local y se actualiza cada 15 segundos. Los mensajes contextuales no alteran los cálculos.
 
 ## GitHub Pages
 

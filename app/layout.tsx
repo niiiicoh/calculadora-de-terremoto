@@ -38,7 +38,7 @@ export default function RootLayout({
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){var t;try{t=localStorage.getItem('terremoto-theme')}catch(e){}document.documentElement.dataset.theme=t==='day'||t==='night'?t:matchMedia('(prefers-color-scheme: dark)').matches?'night':'day'})()`,
+            __html: `(function(){var t;try{t=localStorage.getItem('terremoto-theme')}catch(e){}document.documentElement.dataset.theme=t==='night'?'night':'day'})()`,
           }}
         />
       </head>

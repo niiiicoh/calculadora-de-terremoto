@@ -66,7 +66,9 @@ test("card name, themes, PNG download, live data and responsive editor", async (
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "night");
 });
-test("system theme and supported native file sharing", async ({ page }) => {
+test("light default despite dark system and supported native file sharing", async ({
+  page,
+}) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.addInitScript(() => {
     Object.defineProperty(navigator, "canShare", {
@@ -79,7 +81,7 @@ test("system theme and supported native file sharing", async ({ page }) => {
     });
   });
   await page.goto("/");
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "night");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "day");
   await page.getByRole("button", { name: "Crear tarjeta" }).click();
   await page.getByRole("button", { name: "Compartir imagen" }).click();
   await expect(page.locator(".card-editor [role=status]")).toHaveText(
