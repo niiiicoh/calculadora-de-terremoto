@@ -1,0 +1,36 @@
+import { chromium } from "@playwright/test";
+import assert from "node:assert/strict";
+const url = process.argv[2];
+if (!url) throw new Error("Pass the full site URL.");
+const browser = await chromium.launch({ channel: "msedge" });
+try {
+  const context = await browser.newContext({ permissions: ["clipboard-read", "clipboard-write"] });
+  const page = await context.newPage();
+  const failures = [];
+  page.on("pageerror", error => failures.push(error.message));
+  page.on("response", response => { if (response.status() >= 400) failures.push(`${response.status()} ${response.url()}`); });
+  const response = await page.goto(url);
+  assert.equal(response.status(), 200);
+  await page.locator("#people").fill("12");
+  await page.getByText("24 terremotos", { exact: true }).waitFor();
+  await page.getByRole("button", { name: "Copiar resultado" }).click();
+  await page.getByRole("status").filter({ hasText: "Resultado copiado" }).waitFor();
+  assert.match(await page.evaluate(() => navigator.clipboard.readText()), /Pipeño: 8,4 L/);
+  await page.getByRole("button", { name: "Crear tarjeta" }).click();
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Descargar imagen" }).click();
+  assert.equal((await download).suggestedFilename(), "calculadora-de-terremoto.png");
+  await page.getByRole("button", { name: "Cambiar entre modo claro y nocturno" }).click();
+  const theme = await page.locator("html").getAttribute("data-theme");
+  await page.reload();
+  assert.equal(await page.locator("html").getAttribute("data-theme"), theme);
+  await page.evaluate(() => document.fonts.ready);
+  assert.ok(await page.evaluate(() => document.fonts.check(`40px ${getComputedStyle(document.body).getPropertyValue("--font-fraunces").split(",")[0]}`, "TERREMOTOS")));
+  await page.setViewportSize({ width: 360, height: 800 });
+  assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
+  assert.equal(canonical.replace(/\/$/, ""), "https://niiiicoh.github.io/calculadora-de-terremoto");
+  assert.doesNotMatch(await page.locator('meta[name="robots"]').getAttribute("content"), /noindex/);
+  assert.deepEqual(failures, []);
+  console.log("PASS: page, assets, fonts, calculation, clipboard, PNG download, persistent theme, reload, mobile and SEO.");
+} finally { await browser.close(); }
