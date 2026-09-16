@@ -19,6 +19,9 @@ export const metadata: Metadata = {
   title,
   description,
   authors: [{ name: "@niiiicoh" }],
+  verification: {
+    google: "ib6dINL-OX74CkGTfLw2JgGNb6i--uDFThdNs0QtXtY",
+  },
   metadataBase: siteUrl ? new URL(siteUrl) : undefined,
   alternates: siteUrl ? { canonical: siteUrl } : undefined,
   openGraph: {
